@@ -155,6 +155,11 @@ public class Vector3 implements Vector<Vector3> {
         return Quaternion.fromEulerAngles(eulerAngles).apply(this);
     }
 
+    public @NonNull
+    Vector3 rotate(Quaternion quaternion) {
+        return quaternion.apply(this);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;

@@ -81,6 +81,13 @@ public class Quaternion {
         return fromEulerAngles(eulerAngles.getX(), eulerAngles.getY(), eulerAngles.getZ());
     }
 
+    public static Quaternion fromFloatArray(float[] components) {
+        if (components.length != 4) {
+            throw new IllegalArgumentException("Expected 4 component vector for Quaternion");
+        }
+        return new Quaternion(components[0], components[1], components[2], components[3]);
+    }
+
     public static Quaternion fromEulerAngles(float x, float y, float z) {
         double cosZ = Math.cos(z * 0.5);
         double sinZ = Math.sin(z * 0.5);
@@ -135,6 +142,6 @@ public class Quaternion {
 
     @Override
     public String toString() {
-        return String.format("(%f, %f, %f, %f)", r, i, j, k);
+        return toEulerAngles().toString();
     }
 }

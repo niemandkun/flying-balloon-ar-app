@@ -14,7 +14,7 @@ import com.niemandkun.balloon.model.Constants
 import com.niemandkun.balloon.model.GameStage
 import com.niemandkun.balloon.model.GameStageFactory
 import com.niemandkun.balloon.util.SoundMeter
-import timber.log.Timber
+import com.niemandkun.balloon.util.getViewDirection
 
 class MainActivity : AppCompatActivity() {
     private val mSoundMeter = SoundMeter()
@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Timber.plant(Timber.DebugTree())
 
         mArFragment = supportFragmentManager.findFragmentById(R.id.ar_fragment) as ArFragment
 
@@ -57,10 +56,22 @@ class MainActivity : AppCompatActivity() {
             val amplitude = mSoundMeter.getAmplitude()
             val force = amplitude / Constants.SOUND_TO_FORCE_RATIO
 
-            Timber.e("amplitude=$amplitude, force=$force")
-
             if (amplitude > Constants.SOUND_THRESHOLD) {
-                mGameStage.balloon.applyForce(Vector3.ORT_X.mul(force))
+                val displayPose = mArFragment.arSceneView.arFrame.camera.displayOrientedPose
+
+                val viewDirection = displayPose.getViewDirection()
+                        .normalize()
+
+                val displayToBalloon = Vector3.fromSceneform(mGameStage.balloon.worldPosition)
+                        .sub(Vector3.fromFloatArray(displayPose.translation))
+                        .normalize()
+
+                val cosine = viewDirection.dot(displayToBalloon)
+
+                if (cosine > 0) {
+                    val vectorForce = viewDirection.mul(cosine).mul(force).setY(0.0f)
+                    mGameStage.balloon.applyForce(vectorForce)
+                }
             }
 
             mHandler.postDelayed(this::checkSoundAmplitude, Constants.SOUND_CHECK_INTERVAL_MS)
