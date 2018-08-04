@@ -1,17 +1,22 @@
 package com.niemandkun.balloon
 
-import android.support.v7.app.AppCompatActivity
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.support.v7.app.AppCompatActivity
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.ux.ArFragment
-import com.google.ar.sceneform.ux.TransformableNode
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
-
     private var mBalloon: Renderable? = null
+
+    private var mSoundMeter = SoundMeter()
+
+    private var mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +42,23 @@ class MainActivity : AppCompatActivity() {
                 anchorNode.setParent(arFragment.arSceneView.scene);
             }
         }
+    }
+
+    private fun checkAmplitude() {
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            Timber.e(mSoundMeter.getAmplitude().toString())
+            mHandler.postDelayed(this::checkAmplitude, 500)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSoundMeter.start()
+        mHandler.post(this::checkAmplitude)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSoundMeter.stop()
     }
 }
