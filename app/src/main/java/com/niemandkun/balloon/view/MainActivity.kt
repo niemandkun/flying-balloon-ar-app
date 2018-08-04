@@ -15,6 +15,7 @@ import com.niemandkun.balloon.model.GameStage
 import com.niemandkun.balloon.model.GameStageFactory
 import com.niemandkun.balloon.util.SoundMeter
 import com.niemandkun.balloon.util.getViewDirection
+import kotlin.math.pow
 
 class MainActivity : AppCompatActivity() {
     private val mSoundMeter = SoundMeter()
@@ -63,13 +64,14 @@ class MainActivity : AppCompatActivity() {
                         .normalize()
 
                 val displayToBalloon = Vector3.fromSceneform(mGameStage.balloon.worldPosition)
-                        .sub(Vector3.fromFloatArray(displayPose.translation))
-                        .normalize()
+                        .sub(Vector3.fromFloatArray(displayPose.translation));
 
-                val cosine = viewDirection.dot(displayToBalloon)
+                val cosine = viewDirection.dot(displayToBalloon.normalize())
+
+                val distanceFade = Math.E.toFloat().pow(-Constants.DISTANCE_FADE_RATIO * displayToBalloon.length())
 
                 if (cosine > 0) {
-                    val vectorForce = viewDirection.mul(cosine).mul(force).setY(0.0f)
+                    val vectorForce = viewDirection.mul(cosine).mul(force).mul(distanceFade).setY(0.0f)
                     mGameStage.balloon.applyForce(vectorForce)
                 }
             }
