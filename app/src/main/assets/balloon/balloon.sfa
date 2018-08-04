@@ -1,0 +1,204 @@
+{
+   bound_relative_root: {
+      x: 0.5,
+      y: 0,
+      z: 0.5,
+   },
+   materials: [
+      {
+         name: "_crayfishdiffuse",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.88629999999999998,
+                  0.88629999999999998,
+                  0.88629999999999998,
+                  1,
+               ],
+            },
+            {
+               metallic: 0.25,
+            },
+            {
+               roughness: 0.85,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "02___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  1,
+                  0.1255,
+                  0.1255,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "03___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.090200000000000002,
+                  0.96860000000000002,
+                  1,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "07___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.3412,
+                  0.1255,
+                  0.66669999999999996,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "08___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.058799999999999998,
+                  1,
+                  0.1686,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "09___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  1,
+                  0.96860000000000002,
+                  0.098000000000000004,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+      {
+         name: "13___Default",
+         parameters: [
+            {
+               baseColor: null,
+            },
+            {
+               baseColorTint: [
+                  0.039199999999999999,
+                  0.039199999999999999,
+                  0.039199999999999999,
+                  1,
+               ],
+            },
+            {
+               metallic: 1,
+            },
+            {
+               roughness: 0.408248,
+            },
+            {
+               opacity: null,
+            },
+         ],
+         source: "build/sceneform_sdk/default_materials/obj_material.sfm",
+      },
+   ],
+   model: {
+      attributes: [
+         "Position",
+         "TexCoord",
+         "Orientation",
+      ],
+      collision: {},
+      file: "src/main/assets/balloon/balloon.obj",
+      name: "balloon",
+      recenter: "root",
+      scale: 0.0008,
+   },
+   version: "0.52:1",
+}
