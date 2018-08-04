@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             val force = amplitude / Constants.SOUND_TO_FORCE_RATIO
 
             if (amplitude > Constants.SOUND_THRESHOLD) {
-                val displayPose = mArFragment.arSceneView.arFrame.camera.displayOrientedPose
+                val displayPose = mArFragment.arSceneView.arFrame.camera.pose
 
                 val viewDirection = displayPose.getViewDirection()
                         .normalize()

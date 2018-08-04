@@ -6,7 +6,7 @@ import com.niemandkun.balloon.math.Vector3
 
 class GameStage(balloonRenderable: Renderable, portalRenderable: Renderable) : Node() {
     val balloon = GameObject(Constants.BALLOON_MASS, Constants.AIR_FRICTION, balloonRenderable).apply {
-        localPosition = Vector3.UP.toSceneform()
+        worldPosition = Vector3.UP.toSceneform()
     }
 
     val portal = GameObject(Constants.PORTAL_MASS, Constants.AIR_FRICTION, portalRenderable)
