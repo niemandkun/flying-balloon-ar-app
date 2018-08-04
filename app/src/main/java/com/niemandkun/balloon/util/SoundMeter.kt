@@ -1,4 +1,4 @@
-package com.niemandkun.balloon
+package com.niemandkun.balloon.util
 
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -24,12 +24,12 @@ class SoundMeter {
         }
     }
 
-    fun getAmplitude(): Double {
+    fun getAmplitude(): Float {
         if (mAudioRecord == null) {
-            return 0.0
+            return 0f
         }
         val buffer = ShortArray(mMinBufferSize)
         mAudioRecord!!.read(buffer, 0, mMinBufferSize)
-        return (buffer.max() ?: 0).toDouble()
+        return (buffer.max() ?: 0).toFloat()
     }
 }

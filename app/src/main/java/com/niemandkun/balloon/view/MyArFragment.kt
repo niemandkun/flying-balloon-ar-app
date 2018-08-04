@@ -1,4 +1,4 @@
-package com.niemandkun.balloon
+package com.niemandkun.balloon.view
 
 import android.Manifest
 import com.google.ar.sceneform.ux.ArFragment
