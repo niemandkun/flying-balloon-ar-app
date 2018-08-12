@@ -14,4 +14,8 @@ object Constants {
     const val SOUND_CHECK_INTERVAL_MS = 100L
 
     const val DISTANCE_FADE_RATIO = 1.2F
+
+    const val BALLOON_TO_PORTAL_CHECK_THRESHOLD = 0.1F
+
+    const val DISTANCE_TO_PORTAL = 2.5F
 }

@@ -1,14 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
-  <fragment android:name="com.niemandkun.balloon.view.MyArFragment"
-      android:id="@+id/ar_fragment"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+    <fragment
+        android:name="com.niemandkun.balloon.view.MyArFragment"
+        android:id="@+id/main_ar_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/main_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="80sp"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        tools:text="0"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        tools:text="00:00:00"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textSize="32sp"/>
+
+    <LinearLayout
+        android:id="@+id/main_result_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/main_result_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Your time: 00:10:32"
+            android:layout_marginBottom="32dp"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/main_result_play_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/try_again"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/main_result_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exit"
+            android:textSize="24sp"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+</FrameLayout>

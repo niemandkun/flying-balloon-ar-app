@@ -126,8 +126,13 @@ public class Vector3 implements Vector<Vector3> {
     }
 
     public @NonNull
-    Vector2 clipToVec2() {
+    Vector2 keepXY() {
         return new Vector2(x, y);
+    }
+
+    public @NonNull
+    Vector2 keepXZ() {
+        return new Vector2(x, z);
     }
 
     public @NonNull

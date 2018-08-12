@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Flying Balloon</string>
+    <string name="centimeters_per_second">%1$.1f cm/s</string>
+    <string name="try_again">Play again</string>
+    <string name="exit">Exit</string>
+    <string name="time_result">Your time: %1$s</string>
 </resources>

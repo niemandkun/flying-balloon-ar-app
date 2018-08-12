@@ -18,6 +18,8 @@ open class GameObject(mass: Float, friction: Float, renderable: Renderable)  : N
         this.renderable = renderable
     }
 
+    val velocity: Vector3 get() = mVelocity
+
     override fun onUpdate(frameTime: FrameTime) {
         super.onUpdate(frameTime)
         localPosition = Vector3.fromSceneform(localPosition)
