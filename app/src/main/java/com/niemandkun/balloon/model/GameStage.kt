@@ -23,21 +23,45 @@ class GameStage(
         localPosition = Vector3.UP.mul(0.6f).toSceneform()
     }
 
+    private var mTimeMeasurementStart = 0f
+
+    private var mBeginTimeMeasurement = false
+
+    private var mTimeIsBeingMeasured = false
+
+    var onUpdateListener: ((Float) -> Unit)? = null
+
+    var onGameFinishListener: ((Float) -> Unit)? = null
+
     init {
         balloon.addChild(speedometer)
         addChild(balloon)
         addChild(portal)
     }
 
-    override fun onUpdate(frameTime: FrameTime?) {
+    override fun onUpdate(frameTime: FrameTime) {
         super.onUpdate(frameTime)
+
+        if (!mTimeIsBeingMeasured && mBeginTimeMeasurement) {
+            mBeginTimeMeasurement = false
+            mTimeIsBeingMeasured = true
+            mTimeMeasurementStart = frameTime.startSeconds
+        }
+
+        if (mTimeIsBeingMeasured) {
+            onUpdateListener?.invoke(frameTime.startSeconds - mTimeMeasurementStart)
+        }
 
         val balloonToPortalDistance = Vector3.fromSceneform(balloon.worldPosition).keepXZ()
                 .sub(Vector3.fromSceneform(portal.worldPosition).keepXZ())
                 .length()
 
         if (balloonToPortalDistance < Constants.BALLOON_TO_PORTAL_CHECK_THRESHOLD) {
-            removeChild(portal)
+            onGameFinishListener?.invoke(frameTime.startSeconds)
         }
+    }
+
+    fun beginTimeMeasurement() {
+        mBeginTimeMeasurement = true
     }
 }
