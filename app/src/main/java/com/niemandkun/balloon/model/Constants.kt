@@ -7,7 +7,7 @@ object Constants {
 
     const val AIR_FRICTION = 0.1F
 
-    const val SOUND_TO_FORCE_RATIO = 50_000
+    const val SOUND_TO_FORCE_RATIO = 1_000
 
     const val SOUND_THRESHOLD = 1_000
 

@@ -20,8 +20,11 @@ open class GameObject(mass: Float, friction: Float, renderable: Renderable)  : N
 
     override fun onUpdate(frameTime: FrameTime) {
         super.onUpdate(frameTime)
-        localPosition = Vector3.fromSceneform(localPosition).add(mVelocity).toSceneform()
-        mVelocity = mVelocity.add(mAcceleration).mul(1 - mFriction)
+        localPosition = Vector3.fromSceneform(localPosition)
+                .add(mVelocity.mul(frameTime.deltaSeconds))
+                .toSceneform()
+        mVelocity = mVelocity.mul(1 - mFriction)
+                .add(mAcceleration)
         mAcceleration = Vector3.ZERO
     }
 
