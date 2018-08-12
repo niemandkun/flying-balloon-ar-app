@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.google.ar.core.HitResult
+import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.ux.ArFragment
+import com.niemandkun.balloon.BuildConfig
 import com.niemandkun.balloon.R
 import com.niemandkun.balloon.math.Vector3
 import com.niemandkun.balloon.model.Constants
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mGameStage: GameStage
 
-    private lateinit var mArFragment: ArFragment
+    private lateinit var mArFragment: MyArFragment
 
     private lateinit var mTimer: TextView
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mArFragment = supportFragmentManager.findFragmentById(R.id.main_ar_fragment) as ArFragment
+        mArFragment = supportFragmentManager.findFragmentById(R.id.main_ar_fragment) as MyArFragment
 
         mTimer = findViewById(R.id.main_timer)
         mCountdown = findViewById(R.id.main_countdown)
@@ -57,21 +57,36 @@ class MainActivity : AppCompatActivity() {
         mPlayAgainButton = findViewById(R.id.main_result_play_again)
         mExitButton = findViewById(R.id.main_result_exit)
 
-        GameStageFactory.createScene(this)
-                .thenAccept {
-                    mGameStage = it
-                    mGameStage.onUpdateListener = { time -> mTimer.text = formatSecondsForTimer(time) }
-                    mGameStage.onGameFinishListener = { time ->
-                        mTimer.visibility = View.GONE
-                        mResultMenu.visibility = View.VISIBLE
-                        mResultTime.text = getString(R.string.time_result, formatSecondsForTimer(time))
-                    }
-                    mArFragment.setOnTapArPlaneListener { hitResult, _, _ -> tryDeployGameStage(hitResult) }
-                }
+        GameStageFactory.createScene(this).thenAccept { onGameStageLoadFinished(it) }
 
         mTimer.text = formatSecondsForTimer(0.0f)
         mExitButton.setOnClickListener { _ -> finish() }
         mPlayAgainButton.setOnClickListener { _ -> restartMainActivity() }
+    }
+
+    private fun onGameStageLoadFinished(gameStage: GameStage) {
+        mGameStage = gameStage
+        mGameStage.onUpdateListener = { time -> mTimer.text = formatSecondsForTimer(time) }
+        mGameStage.onGameFinishListener = { time ->
+            mTimer.visibility = View.GONE
+            mResultMenu.visibility = View.VISIBLE
+            mResultTime.text = getString(R.string.time_result, formatSecondsForTimer(time))
+        }
+        createBalloonSpawnTrigger();
+    }
+
+    private fun createBalloonSpawnTrigger() {
+        if (BuildConfig.USE_AUGMENTED_IMAGES) {
+            mArFragment.setOnAugmentedImageFoundListener { images ->
+                images.firstOrNull { it.name == "balloon.png" }
+                        ?.let { it.createAnchor(it.centerPose) }
+                        ?.apply { tryDeployGameStage(this) }
+            }
+        } else {
+            mArFragment.setOnTapArPlaneListener { hitResult, _, _ ->
+                tryDeployGameStage(hitResult.createAnchor())
+            }
+        }
     }
 
     private fun restartMainActivity() {
@@ -80,12 +95,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(selfIntent)
     }
 
-    private fun tryDeployGameStage(hitResult: HitResult) {
-        val anchor = hitResult.createAnchor()
+    private fun tryDeployGameStage(anchor: Anchor) {
         val anchorNode = AnchorNode(anchor)
         anchorNode.setParent(mArFragment.arSceneView.scene)
         mGameStage.setParent(anchorNode)
         mArFragment.setOnTapArPlaneListener(null)
+        mArFragment.setOnAugmentedImageFoundListener(null)
         mHandler.postDelayed({ showCountdown(3) }, 1000)
     }
 
