@@ -57,7 +57,7 @@ class GameStage(
                 .length()
 
         if (balloonToPortalDistance < Constants.BALLOON_TO_PORTAL_CHECK_THRESHOLD) {
-            onGameFinishListener?.invoke(frameTime.startSeconds)
+            onGameFinishListener?.invoke(frameTime.startSeconds - mTimeMeasurementStart)
         }
     }
 
