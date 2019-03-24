@@ -16,7 +16,7 @@ class GameStage(
     }
 
     val portal = GameObject(Constants.PORTAL_MASS, Constants.AIR_FRICTION, portalRenderable).apply {
-        worldPosition = Vector3.FORWARD.mul(Constants.DISTANCE_TO_PORTAL).add(Vector3.UP.mul(0.5f)).toSceneform()
+        worldPosition = Vector3.FORWARD.mul(Constants.DISTANCE_TO_PORTAL).add(Vector3.UP.mul(0.7f)).toSceneform()
     }
 
     private val speedometer = Speedometer(speedometerRenderable).apply {

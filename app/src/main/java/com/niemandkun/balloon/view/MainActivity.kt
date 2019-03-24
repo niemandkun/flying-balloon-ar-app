@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
         GameStageFactory.createScene(this).thenAccept { onGameStageLoadFinished(it) }
 
         mTimer.text = formatSecondsForTimer(0.0f)
-        mExitButton.setOnClickListener { _ -> finish() }
-        mPlayAgainButton.setOnClickListener { _ -> restartMainActivity() }
+        mExitButton.setOnClickListener { finish() }
+        mPlayAgainButton.setOnClickListener { restartMainActivity() }
     }
 
     private fun onGameStageLoadFinished(gameStage: GameStage) {
@@ -72,20 +72,28 @@ class MainActivity : AppCompatActivity() {
             mResultMenu.visibility = View.VISIBLE
             mResultTime.text = getString(R.string.time_result, formatSecondsForTimer(time))
         }
-        createBalloonSpawnTrigger();
+        attachBalloonSpawnTrigger();
     }
 
-    private fun createBalloonSpawnTrigger() {
+    private fun attachBalloonSpawnTrigger() {
         if (BuildConfig.USE_AUGMENTED_IMAGES) {
-            mArFragment.setOnAugmentedImageFoundListener { images ->
-                images.firstOrNull { it.name == "balloon.png" }
-                        ?.let { it.createAnchor(it.centerPose) }
-                        ?.apply { tryDeployGameStage(this) }
-            }
+            attachAugmentedImagesSpawnTrigger()
         } else {
-            mArFragment.setOnTapArPlaneListener { hitResult, _, _ ->
-                tryDeployGameStage(hitResult.createAnchor())
-            }
+            attachOnTapSpawnTrigger()
+        }
+    }
+
+    private fun attachAugmentedImagesSpawnTrigger() {
+        mArFragment.setOnAugmentedImageFoundListener { images ->
+            images.firstOrNull { it.name == "balloon.png" }
+                ?.let { it.createAnchor(it.centerPose) }
+                ?.apply { tryDeployGameStage(this) }
+        }
+    }
+
+    private fun attachOnTapSpawnTrigger() {
+        mArFragment.setOnTapArPlaneListener { hitResult, _, _ ->
+            tryDeployGameStage(hitResult.createAnchor())
         }
     }
 
@@ -121,43 +129,44 @@ class MainActivity : AppCompatActivity() {
         mGameStage.beginTimeMeasurement()
     }
 
-    private fun checkSoundAmplitude() {
+    private fun gameLoop() {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-            mHandler.postDelayed(this::checkSoundAmplitude, Constants.SOUND_CHECK_INTERVAL_MS)
-
-            if (!mGameStageIsReady) {
-                return
+            mHandler.postDelayed(this::gameLoop, Constants.SOUND_CHECK_INTERVAL_MS)
+            if (mGameStageIsReady) {
+                onGameLoopIteration()
             }
+        }
+    }
 
-            val amplitude = mSoundMeter.getAmplitude()
-            val force = amplitude / Constants.SOUND_TO_FORCE_RATIO
+    private fun onGameLoopIteration() {
+        val frame = mArFragment.arSceneView.arFrame ?: return
 
-            if (amplitude < Constants.SOUND_THRESHOLD) {
-                return
-            }
+        val amplitude = mSoundMeter.getAmplitude()
+        val force = amplitude / Constants.SOUND_TO_FORCE_RATIO
 
-            val cameraPose = mArFragment.arSceneView.arFrame.camera.pose
+        if (amplitude < Constants.SOUND_THRESHOLD) {
+            return
+        }
 
-            val viewDirection = cameraPose.getViewDirection().normalize()
+        val viewDirection = frame.androidSensorPose.getViewDirection().normalize()
 
-            val cameraToBalloon = Vector3.fromSceneform(mGameStage.balloon.worldPosition)
-                    .sub(Vector3.fromFloatArray(cameraPose.translation));
+        val cameraToBalloon = Vector3.fromSceneform(mGameStage.balloon.worldPosition)
+            .sub(Vector3.fromFloatArray(frame.camera.displayOrientedPose.translation))
 
-            val cosine = viewDirection.dot(cameraToBalloon.normalize())
+        val cosine = viewDirection.dot(cameraToBalloon.normalize())
 
-            val distanceFade = Math.E.toFloat().pow(-Constants.DISTANCE_FADE_RATIO * cameraToBalloon.length())
+        val distanceFade = Math.E.toFloat().pow(-Constants.DISTANCE_FADE_RATIO * cameraToBalloon.length())
 
-            if (cosine > 0) {
-                val vectorForce = viewDirection.mul(cosine).mul(force).mul(distanceFade).setY(0.0f)
-                mGameStage.balloon.applyForce(vectorForce)
-            }
+        if (cosine > 0) {
+            val vectorForce = viewDirection.setY(0.0f).mul(cosine).mul(force).mul(distanceFade)
+            mGameStage.balloon.applyForce(vectorForce)
         }
     }
 
     override fun onResume() {
         super.onResume()
         mSoundMeter.start()
-        mHandler.post(this::checkSoundAmplitude)
+        mHandler.post(this::gameLoop)
     }
 
     override fun onPause() {

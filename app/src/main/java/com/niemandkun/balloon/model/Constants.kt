@@ -17,5 +17,5 @@ object Constants {
 
     const val BALLOON_TO_PORTAL_CHECK_THRESHOLD = 0.1F
 
-    const val DISTANCE_TO_PORTAL = 2.5F
+    const val DISTANCE_TO_PORTAL = 2F
 }
