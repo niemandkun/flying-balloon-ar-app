@@ -1,5 +1,9 @@
 ## Flying balloon AR app
 
+<a href="https://github.com/niemandkun/flying-balloon-ar-app/blob/master/screenshot.png">
+  <img src="https://raw.githubusercontent.com/niemandkun/flying-balloon-ar-app/master/screenshot.png" height="400" align="right">
+</a>
+
 Simple AR game about blowing off a balloon to a portal.
 
 How to play:
@@ -10,8 +14,6 @@ How to play:
 4. A flying balloon should appear in AR above the physical image
 5. Blow air in the mic of your smartphone to accelerate the balloon
 6. Deliver the balloon to the portal with the strength of your lungs!
-
-![Screenshot](/screenshot.png?raw=true)
 
 ### Build
 
