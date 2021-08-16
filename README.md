@@ -39,6 +39,6 @@ Or simply copy/move `app-standard-debug.apk` on your smartphone and install it t
 
 ### Requirements
 
-Your Android device must be supported by ARCore.
+To run this app your Android device must be compatible with ARCore.
 List of devices supported by ARCore may be found here: https://developers.google.com/ar/devices
 
